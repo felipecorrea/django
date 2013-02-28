@@ -1,3 +1,14 @@
+/* SHORTCUTS MAP */
+
+.shortcutsmap{
+	width: 99.5%;
+	height: auto;
+	background-color:white;	
+}
+.shortcutspmap table td{
+	text-align:left;
+}
+
 /* DASHBOARD */
 
 .dashboard .module table th {

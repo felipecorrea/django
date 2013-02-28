@@ -10,7 +10,34 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
+
+<div id="gotocontainer" style="display: none;float:right;">
+	<input id="go_input" type="text" />
+</div>
+
 <div id="content-main">
+
+<div class="shortcutsmap module">
+	<h2>Shortcuts Map</h2>
+	<table>
+		<tr>
+			<td><b>? :</b></td><td>Open Shortcuts Map</td>
+			<td><b>j :</b></td><td>Scroll Up</td>
+			<td><b>k :</b></td><td>Scroll Down</td>
+		</tr>
+		<tr>
+			<td><b>n :</b></td><td>Next Module</td>
+			<td><b>p :</b></td><td>Previous Module</td>
+			<td><b>j :</b></td><td>Scroll Up</td>
+		</tr>
+		<tr>
+			<td><b>/ :</b></td><td>Search Function</td>
+			<td><b>1 :</b></td><td>Scroll Down</td>
+			<td><b>2 :</b></td><td>Scroll Down</td>
+		</tr>
+
+	</table>
+</div>
 
 {% if app_list %}
     {% for app in app_list %}
@@ -81,4 +108,88 @@
             {% endif %}
     </div>
 </div>
+
+
+<script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.jkey.min.js' %}"></script>
+
+<script type="text/javascript">
+	
+	$(".shortcutsmap").hide()
+	$('.shortcutsmap').data('closed',true)
+	
+	$("#gotocontainer").hide()
+	$('#gotocontainer').data('closed',true)
+	
+	var go_value = '';
+	var apps_list = [];
+	
+	{% if app_list %} 
+	{% for app in app_list %} 
+	
+	apps_list.push('{{app.app_label}}')
+	
+	{% endfor %} 
+	{% endif %}
+	
+	//alert(apps_list)
+	
+	$(document).jkey('g', function(){
+		var closed = $('#gotocontainer').data().closed;
+		if (closed){
+			$("#gotocontainer").slideDown("slow")
+			$("#gotocontainer").data('closed',false)
+			$('#go_input').focus();
+		}
+		else{
+			$("#gotocontainer").slideUp("slow")
+			$("#gotocontainer").data('closed',true)
+		}
+		
+		$('input').on('blur', function() {
+			$(this).val(function( i, val ) {
+				go_value = val.toLowerCase();
+			});
+		});
+				
+		
+		for(i=0;i<apps_list.length;i++){
+			if(go_value == 'app-'+apps_list[i]){
+				$(window).scrollTop($('app-'+apps_list[i]).offsettop);
+			}
+		}
+
+		$("#gotocontainer").delay(1200).data('closed',true).slideUp(400)
+		$("#go_input").val('')
+
+	});
+	
+	$(document).jkey('shift+/',function(){
+
+		var closed = $('.shortcutsmap').data().closed;
+		if (closed){
+			$(".shortcutsmap").slideDown("slow")
+			$(".shortcutsmap").data('closed',false)
+		}
+		
+		else{
+			$(".shortcutsmap").slideUp("slow")
+			$(".shortcutsmap").data('closed',true)
+		}
+	});
+	
+	$(document).jkey('j',function(){		
+		$('html,body').animate({
+			scrollTop: $(window).scrollTop() + 200
+		});
+	});
+	
+	$(document).jkey('k',function(){		
+		$('html,body').animate({
+			scrollTop: $(window).scrollTop() - 200
+		});
+	});	
+		
+
+</script>
 {% endblock %}
