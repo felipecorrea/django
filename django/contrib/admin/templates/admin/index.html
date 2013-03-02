@@ -11,8 +11,10 @@
 
 {% block content %}
 
-<div id="gotocontainer" style="display: none;float:right;">
-	<input id="go_input" type="text" />
+<div id="gotocontainer" style="display: none; float:right; position:fixed; top:4em; right:1em;">
+	<form id="go_input_form">
+		<input id="go_input" type="text" />
+	</form>
 </div>
 
 <div id="content-main">
@@ -28,12 +30,11 @@
 		<tr>
 			<td><b>n :</b></td><td>Next Module</td>
 			<td><b>p :</b></td><td>Previous Module</td>
-			<td><b>j :</b></td><td>Scroll Up</td>
+			<td><b>/ :</b></td><td>Search</td>
 		</tr>
 		<tr>
-			<td><b>/ :</b></td><td>Search Function</td>
-			<td><b>1 :</b></td><td>Scroll Down</td>
-			<td><b>2 :</b></td><td>Scroll Down</td>
+			<td><b>g +</b></td><td><b>module + Enter:</b> Go</td>
+			<td>to </td><td>"module" </td>
 		</tr>
 
 	</table>
@@ -133,8 +134,29 @@
 	{% endif %}
 	
 	//alert(apps_list)
-	
-	$(document).jkey('g', function(){
+
+	document.getElementById('go_input_form').onsubmit= function() {
+    	
+    	go_value = document.getElementById('go_input').value;
+    	
+    	for(i=0;i<apps_list.length;i++){
+			if(go_value == apps_list[i]){
+				$("html,body").animate({scrollTop: $(".app-"+apps_list[i]).offset().top});
+			}
+		}
+		closecontainer();
+		go_value = '';
+		return false;
+	};
+
+	function closecontainer(){
+			$("#gotocontainer").slideUp("slow")
+			$("#gotocontainer").data('closed',true)
+			$("#go_input").val('')
+
+	}
+
+	$(document).jkey('shift+g', function(){
 		var closed = $('#gotocontainer').data().closed;
 		if (closed){
 			$("#gotocontainer").slideDown("slow")
@@ -142,28 +164,13 @@
 			$('#go_input').focus();
 		}
 		else{
-			$("#gotocontainer").slideUp("slow")
-			$("#gotocontainer").data('closed',true)
+			closecontainer();
 		}
 		
-		$('input').on('blur', function() {
-			$(this).val(function( i, val ) {
-				go_value = val.toLowerCase();
-			});
-		});
-				
-		
-		for(i=0;i<apps_list.length;i++){
-			if(go_value == 'app-'+apps_list[i]){
-				$(window).scrollTop($('app-'+apps_list[i]).offsettop);
-			}
-		}
-
-		$("#gotocontainer").delay(1200).data('closed',true).slideUp(400)
 		$("#go_input").val('')
 
 	});
-	
+
 	$(document).jkey('shift+/',function(){
 
 		var closed = $('.shortcutsmap').data().closed;
@@ -178,18 +185,20 @@
 		}
 	});
 	
-	$(document).jkey('j',function(){		
-		$('html,body').animate({
-			scrollTop: $(window).scrollTop() + 200
+	if($('#gotocontainer').data().closed == false){
+
+		$(document).jkey('j',function(){
+			$('html,body').animate({
+				scrollTop: $(window).scrollTop() + 200
+			});
 		});
-	});
-	
-	$(document).jkey('k',function(){		
-		$('html,body').animate({
-			scrollTop: $(window).scrollTop() - 200
-		});
-	});	
 		
+		$(document).jkey('k',function(){		
+			$('html,body').animate({
+				scrollTop: $(window).scrollTop() - 200
+			});
+		});	
+	}
 
 </script>
 {% endblock %}
