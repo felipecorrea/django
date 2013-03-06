@@ -1,3 +1,4 @@
+
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
 
@@ -33,7 +34,7 @@
 			<td><b>/ :</b></td><td>Search</td>
 		</tr>
 		<tr>
-			<td><b>g +</b></td><td><b>module + Enter:</b> Go</td>
+			<td><b>shift + g +</b></td><td><b>module + Enter:</b> Go</td>
 			<td>to </td><td>"module" </td>
 			<td><b>shift+l :</b></td><td>Logout</td>
 		</tr>
@@ -114,6 +115,7 @@
 <script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'admin/js/jquery.jkey.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'admin/js/adminShortcuts.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/changeformShortcuts.js' %}"></script>
 
 <script type="text/javascript">
 	{% if app_list %} 

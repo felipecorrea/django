@@ -61,7 +61,7 @@
 		}
 	});
 	
-	if($('#gotocontainer').data().closed == false){
+	if($('#gotocontainer').data().closed == true){
 
 		$('html,body').jkey('j',function(){
 			$('html,body').animate({
